@@ -6,7 +6,8 @@
 }
 
 body { 
-    background: var(--bg); 
+    background: var(--bg);
+    border-top:10px solid var(--gold);
     color: var(--text); 
     font-family: 'Crimson Text', serif; 
     margin: 0; 
