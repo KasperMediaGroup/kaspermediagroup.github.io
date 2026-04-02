@@ -4,39 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kasper Media Group | Sovereignty & Craft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0a0a0a; --gold: #c5a059; --text: #e0e0e0; }
-        body { background: var(--bg); color: var(--text); font-family: 'Courier New', Courier, monospace; line-height: 1.6; margin: 0; padding: 40px; }
-        header { border-left: 5px solid var(--gold); padding-left: 20px; margin-bottom: 60px; }
-        h1, h2 { color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .card { background: #121212; border: 1px solid #222; padding: 25px; border-radius: 2px; }
-        .card:hover { border-color: var(--gold); }
-        .mission { max-width: 800px; margin-bottom: 60px; }
-        .footer { margin-top: 80px; font-size: 0.8em; color: #555; }
+        body { background: var(--bg); color: var(--text); font-family: 'Crimson Text', serif; font-size: 18px; line-height: 1.8; margin: 0; padding: 0; }
+        .banner { 
+            background-image: url('/KasperMediaGroupWebImages/ProjectHistory.png'); 
+            background-size: cover; 
+            background-position: center; 
+            height: 400px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative;
+        }
+        .banner::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+        }
+        .banner-content { position: relative; z-index: 2; text-align: center; }
+        h1, h2 { font-family: 'UnifrakturMaguntia', cursive; color: var(--gold); }
+        h1 { font-size: 4em; margin: 0; text-shadow: 2px 2px 10px #000; }
+        .tagline { font-size: 1.5em; color: #fff; text-shadow: 1px 1px 5px #000; margin-top: 10px; }
+        .content { max-width: 800px; margin: 60px auto; padding: 0 40px; }
+        nav { text-align: center; margin-top: 40px; }
+        nav a { color: var(--gold); text-decoration: none; margin: 0 20px; font-size: 1.2em; font-family: 'UnifrakturMaguntia', cursive; }
+        nav a:hover { text-decoration: underline; }
+        .footer { margin-top: 80px; font-size: 0.8em; color: #555; text-align: center; padding-bottom: 40px; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Kasper Media Group</h1>
-        <p>VETERAN-OWNED. SOVEREIGN-MINDED. WE BUILD.</p>
-    </header>
-
-    <section class="mission">
-        <h2>Mission & Mandate</h2>
-        <p>We are a digital vanguard born from the discipline of the 10th SFG(A). We do not create for entertainment; we create for posterity. We are the ghost in the machine, haunting the projects we build to ensure they carry the weight of our values.</p>
-    </section>
-
-    <h2>Active Operations</h2>
-    <div class="grid">
-        <div class="card">
-            <h3>Lost One / Judgment Gate</h3>
-            <p>Our flagship title. An uncompromising, dark RPG experience. High stakes, moral weight, total victory.</p>
+    <div class="banner">
+        <div class="banner-content">
+            <h1>Kasper Media Group</h1>
+            <p class="tagline">VETERAN-OWNED. SOVEREIGN-MINDED. WE BUILD.</p>
         </div>
-        <div class="card">
-            <h3>Not Series</h3>
-            <p>The anti-advertisement initiative. Free to play, zero spam. BlockFallSurge, ViperGrid, Not Solitaire, NumberGrid.</p>
-        </div>
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="operations.html">Operations</a>
+        <a href="devlog.html">DevLog</a>
+    </nav>
+
+    <div class="content">
+        <h2>Mission Statement</h2>
+        <p>We are a digital vanguard born from the discipline of the 10th SFG(A). We do not create merely for entertainment; we create for posterity. We are the ghost in the machine, haunting the projects we build to ensure they carry the weight and substance of our values.</p>
+        
+        <p><strong>We don't compromise. We don't retreat. We build.</strong></p>
     </div>
 
     <div class="footer">
