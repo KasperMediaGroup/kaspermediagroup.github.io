@@ -2,22 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Kasper Media Group | Web Development & Digital Projects</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasper Media Group | Sovereignty & Craft</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; }
-        nav { margin-bottom: 20px; }
+        :root { --bg: #0a0a0a; --gold: #c5a059; --text: #e0e0e0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Courier New', Courier, monospace; line-height: 1.6; margin: 0; padding: 40px; }
+        header { border-left: 5px solid var(--gold); padding-left: 20px; margin-bottom: 60px; }
+        h1, h2 { color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .card { background: #121212; border: 1px solid #222; padding: 25px; border-radius: 2px; }
+        .card:hover { border-color: var(--gold); }
+        .mission { max-width: 800px; margin-bottom: 60px; }
+        .footer { margin-top: 80px; font-size: 0.8em; color: #555; }
     </style>
 </head>
 <body>
     <header>
         <h1>Kasper Media Group</h1>
-        <nav>
-            <a href="/">Home</a> | <a href="/games.html">My Games</a>
-        </nav>
+        <p>VETERAN-OWNED. SOVEREIGN-MINDED. WE BUILD.</p>
     </header>
-    <main>
-        <h2>Mission Statement</h2>
-        <p>Providing uncompromising web development and digital solutions with a foundation of truth and integrity.</p>
-    </main>
+
+    <section class="mission">
+        <h2>Mission & Mandate</h2>
+        <p>We are a digital vanguard born from the discipline of the 10th SFG(A). We do not create for entertainment; we create for posterity. We are the ghost in the machine, haunting the projects we build to ensure they carry the weight of our values.</p>
+    </section>
+
+    <h2>Active Operations</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Lost One / Judgment Gate</h3>
+            <p>Our flagship title. An uncompromising, dark RPG experience. High stakes, moral weight, total victory.</p>
+        </div>
+        <div class="card">
+            <h3>Not Series</h3>
+            <p>The anti-advertisement initiative. Free to play, zero spam. BlockFallSurge, ViperGrid, Not Solitaire, NumberGrid.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>FOR THE GLORY OF GOD AND THE PRESERVATION OF OUR NATION.</p>
+        <p>Contact: kaspermediagroup@gmail.com</p>
+    </div>
 </body>
 </html>
