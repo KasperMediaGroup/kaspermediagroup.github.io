@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Title</title>
+    <title>about</title>
     
     <!-- ADD THIS LINE TO ALL YOUR FILES -->
     <link rel="stylesheet" href="style.css">
@@ -11,35 +11,155 @@
     <!-- AND KEEP YOUR FONTS HERE -->
     <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
+<script>
+    let audioCtx, ambientOsc1, ambientOsc2, ambientGain, lfo, filter;
+    let hasStarted = false;
+    
+    function startAmbient() {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        ambientOsc1 = audioCtx.createOscillator();
+        ambientOsc1.type = 'sine';
+        ambientOsc1.frequency.setValueAtTime(25, audioCtx.currentTime);
+        
+        ambientOsc2 = audioCtx.createOscillator();
+        ambientOsc2.type = 'sine';
+        ambientOsc2.frequency.setValueAtTime(27, audioCtx.currentTime);
+        
+        // Low-pass filter to remove harshness
+        filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(200, audioCtx.currentTime);
+        filter.Q.setValueAtTime(1, audioCtx.currentTime);
+        
+        ambientGain = audioCtx.createGain();
+        ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
+        
+        // Connect through filter
+        ambientOsc1.connect(ambientGain);
+        ambientOsc2.connect(ambientGain);
+        ambientGain.connect(filter);
+        filter.connect(audioCtx.destination);
+        
+        ambientOsc1.start();
+        ambientOsc2.start();
+        
+        // === SMOOTH VOLUME SWELLS ===
+        function triggerSwell() {
+            const now = audioCtx.currentTime;
+            // Target volume
+            const peakVol = 0.25 + Math.random() * 0.25; // 0.25 to 0.5
+            const sustain = 3 + Math.random() * 3;
+            const fadeIn = 3;
+            const fadeOut = 4;
+            
+            ambientGain.gain.cancelScheduledValues(now);
+            ambientGain.gain.setValueAtTime(ambientGain.gain.value, now);
+            // Exponential ramp for smooth fade in
+            ambientGain.gain.exponentialRampToValueAtTime(Math.max(peakVol, 0.001), now + fadeIn);
+            // Hold
+            ambientGain.gain.setValueAtTime(peakVol, now + fadeIn + sustain);
+            // Exponential ramp for smooth fade out
+            ambientGain.gain.exponentialRampToValueAtTime(0.08, now + fadeIn + sustain + fadeOut);
+        }
+        
+        setTimeout(triggerSwell, 1500);
+        setInterval(triggerSwell, 6000 + Math.random() * 4000);
+        
+        // === RANDOM PITCH DROPS (subtle) ===
+        setInterval(() => {
+            if (Math.random() < 0.25) {
+                const dropTo = 18 + Math.random() * 4;
+                ambientOsc1.frequency.linearRampToValueAtTime(dropTo, audioCtx.currentTime + 3);
+                ambientOsc2.frequency.linearRampToValueAtTime(dropTo + 2, audioCtx.currentTime + 3);
+                
+                setTimeout(() => {
+                    ambientOsc1.frequency.linearRampToValueAtTime(25, audioCtx.currentTime + 3);
+                    ambientOsc2.frequency.linearRampToValueAtTime(27, audioCtx.currentTime + 3);
+                }, 4000);
+            }
+        }, 8000);
+    }
+    
+    document.addEventListener('click', () => {
+        if (!hasStarted) {
+            startAmbient();
+            hasStarted = true;
+        }
+    }, { once: true });
+    
+    // Nav hover - slightly louder, cleaner
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            const hoverCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = hoverCtx.createOscillator();
+            const gain = hoverCtx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(80, hoverCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(40, hoverCtx.currentTime + 0.08);
+            
+            gain.gain.setValueAtTime(0.08, hoverCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, hoverCtx.currentTime + 0.1);
+            
+            osc.connect(gain);
+            gain.connect(hoverCtx.destination);
+            osc.start();
+            osc.stop(hoverCtx.currentTime + 0.1);
+        });
+    });
+</script>
 <body>
+    <div class="banner" style="background-image: url('KasperMediaGroupWebImages/KnightWalking.jpg'); --focus-y: 46%;">
+        <div class="banner-content">
+            <h1 style="display: flex; align-items: center; justify-content: center;">
+    <a href="index.html">
+        <img src="KasperMediaGroupWebImages/KasperStudios_Logo_003.png" alt="Logo" style="height: 80px; margin-right: 20px;">
+    </a>
+    About
+</h1>
+</div>
+</div>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="operations.html">Operations</a>
-        <a href="devlog.html">DevLog</a>
-    </nav>
+        
 
-    <h1>Kasper Media Group</h1>
-    <h2 style="text-align: center; font-size: 1.5em;">Mission & Mandate</h2>
+        <a href="index.html">sanctuary</a>
+        <a href="about.html">about</a>
+        <a href="crusade.html">crusade</a>
+        <a href="devlog.html">devlog</a>
+    </nav></div>
+    </div>
 
-    <h3>The Identity</h3>
+    
+<div class ="content";>
+    <h3>Mission & Mandate</h3>
+    <h2>The Identity</h2>
     <p>Kasper Media Group is a sovereign, veteran-owned creative outfit stationed deep in the heart of Wisconsin. Born from the discipline of the 10th Special Forces Group and committed to the legacy of our European Christian heritage, we serve as a digital vanguard. We do not create merely for entertainment; we create for posterity. We are the unseen force in a media landscape that has abandoned the truth—we are the ghost in the machine, haunting the projects we build to ensure they carry the weight and substance of our values.</p>
 
-    <h3>The Foundation</h3>
-    <p>We operate under the absolute authority of the Triune God—the Father, the Son, and the Holy Spirit—the one and only true God. We hold the 1560 Geneva Bible as the most accurate translation of His Word, yet we recognize that it is only through the Holy Spirit that we are granted the discernment to properly understand and apply His truth to the world we inhabit.</p>
-    
-    <div class="scripture">
-        "But the Jews had compassion of all the brethren... And at the same time that the things were performed, this was the word of the Lord, that it should be done." — 1 Thessalonians 2:15-16 (1560 Geneva)
-    </div>
+    <h2>The Foundation</h2>
+    <p>We operate under the absolute authority of the Triune God—the Father, the Son, and the Holy Spirit—the one and only true God. We hold the 1560 Geneva Bible as the key text of the reformation and the founding while further recognizing and acknowledging that it is only through the Holy Spirit that we are granted the discernment to properly understand and apply His truth to the world we inhabit.</p>
+
+    <h2>The Standards</h2>
+    <p>
+        Tactical Precision: We bring the rigor of my service to every line of code, every design choice, and every narrative beat. There is no room for the “good enough” culture of a dying world. We execute with the discipline of those who know what it means to hold the line.
+        </p>
+        <p>
+        Stewardship of Kin: Every project is a contribution to the cultural survival of our people. We treat our work as a covert op, blending efficiency and uncompromising focus to build the parallel institutions necessary for our survival.
+        </p>
+        <p>
+        Unapologetic Truth: We build games and digital media that do not apologize for who we are. We provide a space for our kin to gather, to think, and to sharpen one another.
+    </p>
 
     <p>We believe the United States was established as a nation for the descendants of European Christian settlers—a land secured for our posterity to flourish and a mandate to spread the light of Christ to the world. We reject the corrosive lies of the modern era and the globalist decay that seeks to uproot our heritage. We act because weak men sold off the national birthright long ago; we are here to reclaim it.</p>
 
-    <h3>The Objective</h3>
+    <h2>The Objective</h2>
     <p>Whether it is through high-stakes RPGs or professional digital development, our mandate is clear: to build the bulwarks necessary for our future. We adapt, we improvise, and we deliver—quietly, efficiently, and with the conviction that our faith and bloodline remain unextinguished.</p>
     <p><strong>We are not just a media group; we are a fortress.</strong></p>
     
-    <p style="text-align: center; margin-top: 60px; font-family: 'UnifrakturMaguntia', cursive; font-size: 1.5em;">
-        For the glory of God and the preservation of our nation.
-    </p>
+    </div>
+    <div class="footer">
+        <p>FOR THE GLORY OF GOD AND THE PRESERVATION OF OUR NATION.</p>
+        <p>Contact: kaspermediagroup@gmail.com</p>
+    </div>
 </body>
 </html>
