@@ -12,71 +12,66 @@
     <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <script>
-    let audioCtx, ambientOsc1, ambientOsc2, ambientGain, lfo, filter;
+    let audioCtx, ambientOsc1, ambientOsc2, ambientGain, lfo;
     let hasStarted = false;
+    let swellInterval;
     
     function startAmbient() {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
+        // OSC 1: The Deep Rumble (25Hz - feels like standing near a massive engine)
         ambientOsc1 = audioCtx.createOscillator();
         ambientOsc1.type = 'sine';
         ambientOsc1.frequency.setValueAtTime(25, audioCtx.currentTime);
         
+        // OSC 2: Dissonant undertone (27Hz - clashing creates dread)
         ambientOsc2 = audioCtx.createOscillator();
         ambientOsc2.type = 'sine';
         ambientOsc2.frequency.setValueAtTime(27, audioCtx.currentTime);
         
-        // Low-pass filter to remove harshness
-        filter = audioCtx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(200, audioCtx.currentTime);
-        filter.Q.setValueAtTime(1, audioCtx.currentTime);
-        
+        // Master Gain
         ambientGain = audioCtx.createGain();
-        ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
+        ambientGain.gain.setValueAtTime(0, audioCtx.currentTime); // Start silent
         
-        // Connect through filter
+        // Connect
         ambientOsc1.connect(ambientGain);
         ambientOsc2.connect(ambientGain);
-        ambientGain.connect(filter);
-        filter.connect(audioCtx.destination);
+        ambientGain.connect(audioCtx.destination);
         
         ambientOsc1.start();
         ambientOsc2.start();
         
-        // === SMOOTH VOLUME SWELLS ===
+        // === RANDOM VOLUME SWELLS (The Breathing Effect) ===
         function triggerSwell() {
             const now = audioCtx.currentTime;
-            // Target volume
-            const peakVol = 0.25 + Math.random() * 0.25; // 0.25 to 0.5
-            const sustain = 3 + Math.random() * 3;
-            const fadeIn = 3;
-            const fadeOut = 4;
+            // Fade in to random volume between 0.03 and 0.08
+            const peakVol = 0.03 + Math.random() * 0.05;
+            const sustain = 2 + Math.random() * 4; // Hold for 2-6 seconds
+            const fadeOut = 3 + Math.random() * 3; // Fade out over 3-6 seconds
             
             ambientGain.gain.cancelScheduledValues(now);
             ambientGain.gain.setValueAtTime(ambientGain.gain.value, now);
-            // Exponential ramp for smooth fade in
-            ambientGain.gain.exponentialRampToValueAtTime(Math.max(peakVol, 0.001), now + fadeIn);
-            // Hold
-            ambientGain.gain.setValueAtTime(peakVol, now + fadeIn + sustain);
-            // Exponential ramp for smooth fade out
-            ambientGain.gain.exponentialRampToValueAtTime(0.08, now + fadeIn + sustain + fadeOut);
+            ambientGain.gain.linearRampToValueAtTime(peakVol, now + 2);
+            ambientGain.gain.setValueAtTime(peakVol, now + 2 + sustain);
+            ambientGain.gain.linearRampToValueAtTime(0.005, now + 2 + sustain + fadeOut);
         }
         
-        setTimeout(triggerSwell, 1500);
-        setInterval(triggerSwell, 6000 + Math.random() * 4000);
+        // First swell starts after 1 second, then repeats every 5-10 seconds
+        setTimeout(triggerSwell, 1000);
+        setInterval(triggerSwell, 5000 + Math.random() * 5000);
         
-        // === RANDOM PITCH DROPS (subtle) ===
+        // === RANDOM PITCH DROPS (Like something shifting) ===
         setInterval(() => {
-            if (Math.random() < 0.25) {
-                const dropTo = 18 + Math.random() * 4;
-                ambientOsc1.frequency.linearRampToValueAtTime(dropTo, audioCtx.currentTime + 3);
-                ambientOsc2.frequency.linearRampToValueAtTime(dropTo + 2, audioCtx.currentTime + 3);
+            if (Math.random() < 0.3) { // 30% chance every 8 seconds
+                const dropTo = 20 + Math.random() * 5;
+                ambientOsc1.frequency.linearRampToValueAtTime(dropTo, audioCtx.currentTime + 2);
+                ambientOsc2.frequency.linearRampToValueAtTime(dropTo + 2, audioCtx.currentTime + 2);
                 
+                // Restore after 3 seconds
                 setTimeout(() => {
-                    ambientOsc1.frequency.linearRampToValueAtTime(25, audioCtx.currentTime + 3);
-                    ambientOsc2.frequency.linearRampToValueAtTime(27, audioCtx.currentTime + 3);
-                }, 4000);
+                    ambientOsc1.frequency.linearRampToValueAtTime(25, audioCtx.currentTime + 2);
+                    ambientOsc2.frequency.linearRampToValueAtTime(27, audioCtx.currentTime + 2);
+                }, 3000);
             }
         }, 8000);
     }
@@ -88,27 +83,30 @@
         }
     }, { once: true });
     
-    // Nav hover - slightly louder, cleaner
+    // NAVIGATION: Short, dark, metallic "clink"
     document.querySelectorAll('nav a').forEach(link => {
         link.addEventListener('mouseenter', () => {
             const hoverCtx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = hoverCtx.createOscillator();
             const gain = hoverCtx.createGain();
             
+            // Lower, shorter, colder
             osc.type = 'sine';
             osc.frequency.setValueAtTime(80, hoverCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(40, hoverCtx.currentTime + 0.08);
             
-            gain.gain.setValueAtTime(0.08, hoverCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, hoverCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.04, hoverCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, hoverCtx.currentTime + 0.08);
             
             osc.connect(gain);
             gain.connect(hoverCtx.destination);
             osc.start();
-            osc.stop(hoverCtx.currentTime + 0.1);
+            osc.stop(hoverCtx.currentTime + 0.08);
         });
     });
 </script>
+
+
 <body>
     <div class="banner" style="background-image: url('KasperMediaGroupWebImages/DevLog.png'); --focus-y: 40%;">
         <div class="banner-content">
