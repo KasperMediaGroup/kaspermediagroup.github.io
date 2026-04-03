@@ -38,7 +38,7 @@ nav a:hover { text-decoration: underline; }
     border: none;
     border-top: 2px solid var(--gold);
     margin: 60px auto;
-    width: 50%;
+    max-width: 800px;
     opacity: 0.6;
 }
 
