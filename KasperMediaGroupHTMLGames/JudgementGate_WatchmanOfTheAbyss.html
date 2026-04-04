@@ -192,14 +192,23 @@
         .inv-slot {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px;
+            gap: 8px;
+            padding: 6px 8px;
             background: #222;
             margin-bottom: 5px;
             border-radius: 4px;
             border: 1px solid #333;
             cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
         }
+        .inv-slot span {
+    flex: 1;              /* fills available space */
+    white-space: nowrap;  /* prevents wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* adds ... if too long */
+}
 
         .inv-slot:hover { background: #333; }
 
@@ -309,6 +318,23 @@
         .msg-combat { color: #ff6b6b; }
         .msg-item { color: #6bff6b; }
         .msg-level { color: #ffd700; }
+        .inv-delete {
+    margin-left: auto;
+    background: transparent;
+    border: none;
+    color: #aa4444;
+    cursor: pointer;
+    font-weight: bold;
+}
+.item-stats {
+    flex-shrink: 0;
+    font-size: 0.8em;
+    opacity: 0.8;
+}
+
+.inv-delete:hover {
+    color: #ff6666;
+}
     </style>
 </head>
 <body>
@@ -1644,10 +1670,38 @@ function renderInventory() {
     player.inventory.forEach((item, i) => {
         let div = document.createElement("div");
         div.className = "inv-slot rarity-" + item.rarity;
-        div.innerHTML = `<span>${item.name}</span><small style="margin-left:auto;">${item.atk > 0 ? "+" + item.atk : ""}${item.def > 0 ? " DEF+" + item.def : ""}</small>`;
+        div.innerHTML = `
+    <span>${item.name}</span>
+    <small class="item-stats">
+        ${item.atk > 0 ? "+" + item.atk : ""}
+        ${item.def > 0 ? " DEF+" + item.def : ""}
+    </small>
+    <button class="inv-delete">✖</button>
+`;
         div.onclick = () => equipItem(i);
+
+let deleteBtn = div.querySelector(".inv-delete");
+deleteBtn.onclick = (e) => {
+    e.stopPropagation(); // 🔥 THIS is what prevents equip
+    deleteItem(i);
+};
         list.appendChild(div);
     });
+    // Inventory Delete Item
+    function deleteItem(index) {
+    let item = player.inventory[index];
+    if (!item) return;
+
+    // Optional: confirmation (recommended)
+    if (!confirm(`Destroy ${item.name}?`)) return;
+
+    // Remove item
+    player.inventory.splice(index, 1);
+
+    updateUI();
+    renderInventory();
+    log(`Destroyed: ${item.name}`, "msg-combat");
+    }
 }
 
 /* ======================================================
